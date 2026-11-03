@@ -2,13 +2,13 @@
 id: 0008
 slug: manager-version-mismatch
 title: xxKSU manager refused the kernel with "manager needs update"
-status: fixed
+status: verified
 severity: medium
 area: root
 opened: 2026-10-10
-updated: 2026-10-10
+updated: 2026-11-03
 fix_commit: [5291804a5dee]
-verified_on: ""
+verified_on: "4.19.325-cip136-st20-EsTehAnget"
 tags: [ksu, folksu, xxksu, uapi, manager]
 related: [0007]
 ---
@@ -114,3 +114,31 @@ Ini **kompatibilitas**, bukan upgrade. Konsekuensinya:
 - [ ] manager terbuka tanpa "manager needs update"
 - [ ] `su` dari manager tetap berfungsi
 - [ ] modul tetap bisa dipasang
+
+## Addendum — rule re-verified on BakaSU (2026-11-03)
+
+Status note: the FolkSU fix above (`5291804a5dee`) was never verified on
+hardware — xxKSU/FolkSU was removed permanently on 15 Oct 2026 (single
+root driver, see issue 0030), so the unchecked FolkSU checklist stays as
+a historical record only.
+
+What got proven now is the underlying **rule**, on the current driver:
+the manager refuses the kernel with "manager needs update" whenever its
+versionCode is below the driver's `KSU_VERSION`. Any driver sync/bump
+must keep the pin at or below an installed/available manager release —
+the deliberate hold of `KSU_VERSION` 35229 (issue 0030) did exactly
+that, and the bump to 35257 (`9f8cd36fc410`, rev 4557) only landed
+together with a manager APK at ≥ 35257.
+
+Evidence after the rev 4557 sync was flashed on 3 Nov 2026, uname
+`4.19.325-cip136-st20-EsTehAnget`:
+
+```
+manager   com.resukisu.resukisu  versionCode=35257 (minSdk=26)
+driver    KSU_VERSION 35257 (BAKASU_REV_COUNT 4557)
+root      uid=0(root) gid=0(root) groups=0(root) context=u:r:ksu:s0
+          manager opens normally — no "manager needs update"
+```
+
+Manager versionCode 35257 == driver 35257 works, so the comparison on
+this line is inclusive.

@@ -1,13 +1,13 @@
 ---
 id: 0034
 title: EsTehAnget24.0 baseline tidak membawa garis fix I/O & network dari linimasa migrate-xxksu-driver (fq_codel default, swappiness cap 200, zram default disksize)
-status: fixed
+status: verified
 severity: medium
 area: config
 opened: 2026-11-03
 updated: 2026-11-03
 fix_commit: "f743aede6c5d 7b8a5dff33d6 941dcbda7bca"
-verified_on: ""
+verified_on: "4.19.325-cip136-st20-EsTehAnget"
 tags: [io, network, zram, qdisc, sysctl, restore, baseline-gap]
 related: [0003, 0029, 0030]
 ---
@@ -83,15 +83,33 @@ provenance noted in the message bodies):
 
 ## Verification
 
-- Build gate: pending local build (greenforce clang 24.0.0; push gated on
-  `MAKE_EXIT=0`; `.config` must show all three symbols after regen).
-- Hardware checklist at next flash-test (`uname -r` of this build):
-  - `tc qdisc show` → default `fq_codel` on1 wifi interfaces
-  - `cat /proc/sys/vm/swappiness` → default 100, write 200 accepted
-  - `cat /sys/block/zram0/disksize` → ~2.9 GB (6 GB unit) without a
-    userspace explicit write
-  - `/data/adb/modules/zram-fix` module log → expected `SKIP`
-- Issue upgrades to `verified` only after hardware evidence lands.
+- Build gate: passed — Greenforce Cirrus clang 24.0.0, `MAKE_EXIT=0`;
+  post-regen `.config` shows `CONFIG_NET_SCH_FQ_CODEL=y`,
+  `CONFIG_NET_SCH_DEFAULT=y`, `CONFIG_DEFAULT_FQ_CODEL=y` and
+  `CONFIG_CLANG_VERSION=240000` (toolchain fingerprint healthy, issue 0033).
+- Hardware flash-test 3 Nov 2026 (selene `65cb03c00702`, 21061119AG):
+  - `uname -r` = `4.19.325-cip136-st20-EsTehAnget`, build `#3 Tue Nov 3
+    21:07:42 WIB 2026`, `/proc/version` = Cirrus clang 24.0.0.
+  - R1 — `tc qdisc show` (via root): default `fq_codel` on `wlan0`
+    (4 queues), `ccmni0` and `ap0` (limit 10240p, ecn, flows 1024).
+  - R2 — swappiness runtime default **100**; write **200 accepted**
+    (read back 200), write **250 rejected** (value stays 100) →
+    ceiling 200 active; value restored to 100 after the test.
+  - R3 — `/sys/block/zram0/disksize` = `2996133888` B = **2857 MB**,
+    exactly 50% of totalram (~5.58 GB) — not the fstab 55% value → the
+    size comes from the kernel-side late_initcall. `/proc/swaps` shows
+    `/dev/block/zram0` active (2925908 kB, SwapTotal 2925908 kB).
+    Causality clincher: the rescue module is not installed on this
+    device at all (`/data/adb/modules/` holds only
+    hma_oss_zygisk/nomount/rezygisk/xiaomicamera/zygisk_lsposed), so no
+    userspace path could have written the size.
+  - The `dmesg` `default disksize` line was not captured via
+    `su -c dmesg` (log buffer restricted/rotated after boot) — the
+    causality above rests on the value + absent-module evidence.
+  - Root sanity in the same session: `su -c id` = `uid=0 …
+    context=u:r:ksu:s0`; manager `com.resukisu.resukisu` versionCode
+    35257 ≥ driver `KSU_VERSION` 35257 (issue 0008 addendum).
+- Issue upgraded to `verified` with the on-device evidence above.
 
 ## Regression test
 
