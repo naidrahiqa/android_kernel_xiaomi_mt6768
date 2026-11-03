@@ -6,7 +6,7 @@ severity: high
 area: drivers
 opened: 2026-10-24
 updated: 2026-10-24
-fix_commit: "e195ab7d5beb6aad368d231767ba8339dfbb2453"
+fix_commit: "a522853cc373a9ed99d5b0edb6b0d1a0c0e02468"
 verified_on: "2026-10-24 · selene 65cb03c00702 · 4.19.325-cip136-st20-EsTehAnget+ #1 SMP PREEMPT Sat Oct 24 04:57:42 WIB 2026 · NoMount v2.2.0 (605)"
 tags: [imgsensor, imx355, ultrawide, camera, selene, defconfig]
 related: [0008, 0030]
@@ -40,7 +40,7 @@ drivernya. Bukti inventaris:
   (sumber asli): `imx355_sunny_ultra_mipi_raw`, `imx355_aac_ultra_mipi_raw`.
 - Tambah kedua nama ke baris `CONFIG_CUSTOM_KERNEL_IMGSENSOR` di
   `selene_defconfig`.
-- Commit: `e195ab7d5beb6aad368d231767ba8339dfbb2453` (EsTehAnget24.0),
+- Commit: `a522853cc373a9ed99d5b0edb6b0d1a0c0e02468` (EsTehAnget24.0),
   cherry-pick `6bf3ad33caa7badd210ebd9d9498a6c3c6cd6c2e` (EsTehAnget-HyperOS).
 
 ## Bukti di hardware (verified)

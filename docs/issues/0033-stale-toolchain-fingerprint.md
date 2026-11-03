@@ -6,7 +6,7 @@ severity: medium
 area: build
 opened: 2026-10-24
 updated: 2026-10-24
-fix_commit: "be5fb9bf29b5"
+fix_commit: "1e88b22bcb411503d1da80495acf35f1308531e8"
 verified_on: "4.19.325-cip136-st20-EsTehAnget+ (banner #6 SMP PREEMPT Sat Oct 24 13:50:15 WIB 2026, selene 65cb03c00702)"
 tags: [toolchain, clang, regen, fingerprint, greenforce, check-toolchain]
 related: []
@@ -35,7 +35,7 @@ dari `.config` lama.
 
 ## Fix
 
-1. **`scripts/check-toolchain.sh` (`be5fb9bf29b5`)** — exit 1 kalau
+1. **`scripts/check-toolchain.sh` (`1e88b22bcb411503d1da80495acf35f1308531e8`)** — exit 1 kalau
    `command -v clang` bukan `greenforce-clang/bin` milik worktree ini;
    banner wajib `Cirrus clang` (vendor string Greenforce). Jalankan di
    shell yang sama persis sebelum `make` apa pun, **termasuk regen

@@ -4,8 +4,8 @@
 **Tanggal:** 23 Okt 2026
 **Branch:** `EsTehAnget24.0`
 **Commit:**
-- `b18304328bf7` defconfig: add selene_defconfig from the baseline defconfig plus fragment
-- `9b30b0ec3b79` drivers: wlan: store channel tables as unsigned
+- `5ece4de8159adb43b86b55b1b6a37fe85aebc2fc` defconfig: add selene_defconfig from the baseline defconfig plus fragment
+- `c8cfc4bc4891b8d7652bfac975b9f668bb7410cd` drivers: wlan: store channel tables as unsigned
 
 ## Gejala
 

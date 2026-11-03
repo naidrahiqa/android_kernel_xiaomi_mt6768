@@ -113,5 +113,5 @@ Beberapa catatan point-in-time di atas sudah terbasahi hasil hari yang sama:
   root `u:r:ksu:s0`, config kunci (KSU/MANUAL_HOOK/HOSTSREDIRECT/NOMOUNT)
   `=y` di `/proc/config.gz`.
 - `scripts/check-toolchain.sh` kini **ter-track git** (commit
-  `be5fb9bf29b5`) — unknown §7 "re-add manual bila pindah mesin" tidak
+  `1e88b22bcb411503d1da80495acf35f1308531e8`) — unknown §7 "re-add manual bila pindah mesin" tidak
   berlaku lagi.
