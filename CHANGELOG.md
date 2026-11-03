@@ -4,6 +4,16 @@ Kernel by [@naidrahiqa](https://github.com/naidrahiqa)
 
 ---
 
+## 2026-11-03 — BakaSU rev 4557 sync + Restorasi Fix I/O & Network (upstream sync & config restore batch)
+
++ **bakasu:** sync driver ke upstream `Baka-SU/BakaSU@main` rev **4557** (`516d3e87`, +21 commit) — module preinit (`preinit/` + runner nolibc), feature `shell_su_adb_only`, standarisasi `module_blacklist` param (menggantikan `module_load_filter` custom), BTF parser untuk probing ABI kernel baru, migrasi `ksys_unshare`→`ksyscall`, bersih-bersih guard yang inert di 4.19; `KSU_VERSION` **35229 → 35257** + `BAKASU_REV_COUNT` 4557 (`9f8cd36fc410`). `include/uapi` symlink di-repacking `../uapi` (artifact flatten — build preinit runner butuh `headers_install` dulu pada fresh out/). Cherry-pick masuk `EsTehAnget-HyperOS` (`80c3e9ac5c8f`) + force-push `--force-with-lease` berhasil. **Manager APK versionCode ≥ 35257 WAJIB terinstall sebelum flash kernel ini** (`docs/issues/0008`); rollback versi = 2 baris Kbuild.
++ **restore (issue `0034`):** analisa mendalam I/O & network menemukan garis fix dari linimasa dev lama `migrate-xxksu-driver` tidak pernah di-bawa ke baseline import `EsTehAnget24.0` — rebase Skyron tidak menyebabkan hilang, gap-nya lebih tua. Tiga restore:
+  + **fq_codel default qdisc** (`7b8a5dff33d6` — restore `709b52d0129e`): tanpa `NET_SCH_DEFAULT`, pilihan default `pfifo_fast` → tanpa flow-separation untuk hotspot/tethering.
+  + **sysctl swappiness cap 200** (`f743aede6c5d` — restore `826146b2e88e`): apapun di atas `100` ditolak di baseline; runtime default tetap 100, cap untuk userspace diperlakukan 200 untuk unit RAM 6GB dengan zram sebagai swap utama.
+  + **zram default disksize 50% RAM cap 4GB kernel-side** (`941dcbda7bca` — restore `adcd3ae96c0c` + final policy `fe325d369c3e`): di-set di `late_initcall` sebelum userspace; fstab `zramsize=55%` write kena EBUSY dan mkswap/swapon jalan pakai nilai kernel — baseline dulu jalan tanpa ini (rescue module `zram-fix` menambal boot race).
++ **kandidat antrean (tier-2, benchmark A/B dulu):** TCP CC BBR vs westwood vs cubic, page-cluster 0, XANMOD mq-deadline (sequential + front_merges off), rq_affinity=2, NAPI poll weight wlan/P2P (butuh driver `6b6efdb0bc43`), zram CMA alloc (`82298e5dc429`) — juga kandidat restore opsional: ADIOS series (6 komit), dyn_fsync, FUSE refrigerate, ESP-offload defconfig.
++ **validasi:** build gate pending (`MAKE_EXIT=0` wajib sebelum push); hardware flash-test checklist di issue 0034.
+
 ## 2026-11-03 — Rebase ke upstream `mt6768-S/lineage-24.0` (rebase Skyron) + Mali r56p0
 
 + **trees:** rebase penuh `EsTehAnget24.0` **dan** `EsTehAnget-HyperOS` ke tip baru `mt6768-S/lineage-24.0` (`ac0b904fc30d` — upstream menulis-ulang branch-nya: import Xiaomi di-reimport, history diluruskan jadi linear). 21 commit lokal ter-replay tanpa kehilangan patch (`git range-diff` semua `=`); satu-satunya delta patch logspam = resolve konflik `mtk_ts_blk_ntc.c` (hunk kita vs upstream `mtkts_blkntc_dprintk()` yang setara — punya upstream yang dipertahankan).
