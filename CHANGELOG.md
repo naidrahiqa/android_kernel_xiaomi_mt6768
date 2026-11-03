@@ -4,6 +4,15 @@ Kernel by [@naidrahiqa](https://github.com/naidrahiqa)
 
 ---
 
+## 2026-11-03 — Rebase ke upstream `mt6768-S/lineage-24.0` (rebase Skyron) + Mali r56p0
+
++ **trees:** rebase penuh `EsTehAnget24.0` **dan** `EsTehAnget-HyperOS` ke tip baru `mt6768-S/lineage-24.0` (`ac0b904fc30d` — upstream menulis-ulang branch-nya: import Xiaomi di-reimport, history diluruskan jadi linear). 21 commit lokal ter-replay tanpa kehilangan patch (`git range-diff` semua `=`); satu-satunya delta patch logspam = resolve konflik `mtk_ts_blk_ntc.c` (hunk kita vs upstream `mtkts_blkntc_dprintk()` yang setara — punya upstream yang dipertahankan).
++ **gpu:** upstream mengganti seluruh Mali DDK **r32p1 → r56p0** (`9ee8a846c41b`, ±514 file, `drivers/gpu/mediatek/gpu_mali/mali_valhall/mali-r56p0/`). Ikut konsisten: `selene_defconfig` di kedua branches dibump `CONFIG_MTK_GPU_VERSION="mali valhall r56p0"` (`6fa7e3cd67f2`, `d495d7b679d5`) — string ini pilihan yang mengarahkan Makefile MTK GPU ke dir `mali-rNNNNpN`, jadi bump = wajib, bukan kosmetik. Defconfig vendor k6xxx (chip lain) sengaja tetap r32p1 mengikuti upstream.
++ **upstream fix yang ikut tertarik ke base baru:** fix CFI failure di connectivity (`gen4m` MD RF notify + OID_PNP_SET_POWER, wmt/bt/fmradio callback), `chg_type_det` TCPC missing handling, batalkan WARN `force_get_tbat_internal`, `page_alloc` highatomic reserve di watermark fastpath, zram boleh alloc CMA, `setlocalversion` tidak lagi menambah `+`, vendor `mt6768_defconfig` di-regen (`-Skyron` + LTO/CFI/SHADOW_CALL_STACK — **bukan** target build kita; `selene_defconfig` tetap ringkas di-set sendiri).
++ **defconfig branding:** commit `dieD karnul` (`LOCALVERSION="-dieD"` di vendor `mt6768_defconfig`) gugur by choice — file vendor defconfig kini up-to-upstream penuh; identitas build kita tetap dari `selene_defconfig` (`-EsTehAnget` / `-EsTehAnget-HyperOS`).
++ **docs:** SHA commit lokal di issue 0029/0031/0033 + `docs/skill-system-audit.md` di-refresh ke SHA pasca-rebase (`fbd5f8b0210a`); SHA di entri changelog yang lebih lama sengaja dibiarkan (rekam jejak sebelum rewrite).
++ **validasi:** build lokal Greenforce Cirrus 24.0.0 `MAKE_EXIT=0`, `Image.gz-dtb` 12.4 MB keluar, `strings out/vmlinux` = `r56p0-19eac0 (UK version 11.46)`, config kunci `KSU`/`KSU_MANUAL_HOOK`/`KSU_HOSTSREDIRECT`/`NOMOUNT` semua on. **GPU DDK r56p0 belum dites di hardware** — userspace GPU ROM wajib dianggap kompatibel dulu saat flash-test berikutnya; warning bisu di defconfig vendor upstream (LTO/CFI/SCS) tidak ikut karena bukan config kita.
+
 ## 2026-10-23 — EsTehAnget24.0 Baseline: Rebrand + Integrasi Inti + Pipa Rilis
 
 + **trees:** baseline fresh dari `creativchic/lineage-24.0` (`fa7077ae`) + `mt6768-S` (`6d3888fc`) + local commits; branch utama **`EsTehAnget24.0`**; branding uname pindah ke belakang — `4.19.325-cip136-st20-EsTehAnget+` via `CONFIG_LOCALVERSION="-EsTehAnget"` + `localversion-cip`/`localversion-st` (file `localversion` & `VERSION` tidak dipakai). Komit penataan awal: `978ac210` (drop CI in-tree), `1b97d049` (carry README/CHANGELOG/docs), `ce36fcc7` + `26a811ce` (gitignore local-only), `b183043` (selene_defconfig).
