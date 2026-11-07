@@ -137,6 +137,7 @@ all.config
 # ".*" rule above; these are the plain-name leftovers.
 AGENTS.md
 ROADMAP.md
+docs/
 out/
 ak3/
 greenforce-clang/
