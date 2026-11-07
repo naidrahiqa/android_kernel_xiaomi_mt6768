@@ -101,7 +101,7 @@ static ssize_t dyn_fsync_suspended_show(struct kobject *kobj,
 					struct kobj_attribute *attr,
 					char *buf)
 {
-	return sprintf(buf, "%u\n", dyn_fsync_suspended ? 1 : 0);
+	return sprintf(buf, "%u\n", READ_ONCE(dyn_fsync_suspended) ? 1 : 0);
 }
 
 static ssize_t dyn_fsync_version_show(struct kobject *kobj,
