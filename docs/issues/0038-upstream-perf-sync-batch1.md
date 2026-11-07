@@ -1,7 +1,7 @@
 ---
 id: 0038
 title: Sync Batch 1 optimasi performa dan stabilitas dari upstream/lineage-24.0-perf (22 commits)
-status: fixed-build-only
+status: verified
 severity: medium
 area: perf
 opened: 2026-11-07
@@ -37,4 +37,10 @@ Batch 1 mengambil 22 patch prioritas tinggi yang mencakup:
 
 - Semua 22 patch lolos cherry-pick bersih tanpa git conflict.
 - Toolchain: Greenforce Clang 24.0.0 (`CONFIG_CLANG_VERSION=240000`).
-- Local build compilation test berjalan via `make -j$(nproc) selene_defconfig`.
+- Local build compilation test berjalan via `make -j$(nproc) selene_defconfig` (Image.gz-dtb 12MB, MAKE_EXIT=0).
+- Flashed on device Redmi 10 (selene) via AnyKernel3 (`EsTehAnget-05b8afa-071126.zip`):
+  - Boot sukses: `Linux localhost 4.19.325-cip136-st20-EsTehAnget #10`
+  - BakaSU UAPI v5 aktif (`uid=0`, context `u:r:ksu:s0`, ksud active)
+  - NoMount v2.2.0 active
+  - Kamera ultrawide IMX355 initialized & open successfully
+  - Audio, Wi-Fi, dan modul Leica Camera 5.0 aktif normal.
