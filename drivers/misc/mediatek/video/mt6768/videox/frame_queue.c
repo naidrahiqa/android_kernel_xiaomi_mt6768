@@ -282,10 +282,7 @@ static int fence_wait_worker_func(void *data)
 	sched_setscheduler(current, SCHED_RR, &param);
 
 	while (1) {
-		wait_event_interruptible(head->wq,
-			!list_empty(&head->queue) || kthread_should_stop());
-		if (kthread_should_stop())
-			break;
+		wait_event_interruptible(head->wq, !list_empty(&head->queue));
 
 		mutex_lock(&head->lock);
 		if (list_empty(&head->queue)) {
