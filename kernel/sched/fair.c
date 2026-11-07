@@ -10026,6 +10026,14 @@ static struct rq *find_busiest_queue(struct lb_env *env,
 			continue;
 
 		/*
+		 * Don't try to pull utilization from a CPU with one
+		 * running task. Whatever its utilization, we will fail
+		 * to detach the task.
+		 */
+		if (rq->nr_running <= 1)
+			continue;
+
+		/*
 		 * For the load comparisons with the other CPU's, consider
 		 * the weighted_cpuload() scaled with the CPU capacity, so
 		 * that the load can be moved away from the CPU that is
@@ -10041,14 +10049,6 @@ static struct rq *find_busiest_queue(struct lb_env *env,
 			busiest_capacity = capacity;
 			busiest = rq;
 		}
-
-		/*
-		 * Don't try to pull utilization from a CPU with one
-		 * running task. Whatever its utilization, we will fail
-		 * detach the task.
-		 */
-		if (rq->nr_running <= 1)
-			continue;
 	}
 
 	return busiest;
