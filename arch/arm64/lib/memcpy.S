@@ -243,10 +243,6 @@ L(copy64_from_start):
 	ret
 
 ENDPIPROC(memcpy)
-EXPORT_SYMBOL(memcpy)
 ENDPROC(__memcpy)
-EXPORT_SYMBOL(__memcpy)
 ENDPIPROC(memmove)
-EXPORT_SYMBOL(memmove)
 ENDPROC(__memmove)
-EXPORT_SYMBOL(__memmove)
