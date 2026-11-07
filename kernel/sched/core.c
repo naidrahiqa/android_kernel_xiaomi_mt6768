@@ -749,7 +749,7 @@ static DEFINE_MUTEX(uclamp_mutex);
 #include <linux/sort.h>
 #include "../../drivers/misc/mediatek/base/power/include/mtk_upower.h"
 
-int total_opp_count;
+static int total_opp_count;
 int opp_capacity_tbl_ready;
 static unsigned int opp_capacity_tbl[64];
 
