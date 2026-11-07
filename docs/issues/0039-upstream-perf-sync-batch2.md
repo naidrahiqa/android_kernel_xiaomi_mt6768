@@ -1,7 +1,7 @@
 ---
 id: 0039
 title: Sync Batch 2 optimasi performa, scheduler, dan daya dari upstream/lineage-24.0-perf (19 commits)
-status: fixed-build-only
+status: verified
 severity: medium
 area: perf
 opened: 2026-11-07
@@ -45,5 +45,8 @@ Batch 2 mengintegrasikan 19 commits yang berfokus pada:
 - Verifikasi kompilasi lokal via Greenforce Clang 24.0.0 (`CONFIG_CLANG_VERSION=240000`, `selene_defconfig`):
   - `Image.gz-dtb` dihasilkan sukses (12MB, MAKE_EXIT=0).
 - Dipaketkan ke AnyKernel3 flashable zip: `dist/EsTehAnget-02320d7-071126.zip` (SHA256: `5fc71e284f27380ded2dcf68fb88562956c91372a19de55bfc63ce0a201f4485`).
-- Pushed to device at `/sdcard/Download/EsTehAnget-02320d7-071126.zip` (checksum verified). Siap diuji di hardware.
+- Flashed on device Redmi 10 (selene):
+  - Uptime 47+ menit stabil (`Linux localhost 4.19.325-cip136-st20-EsTehAnget #11 SMP PREEMPT Sat Nov 7 12:17:28 WIB 2026`).
+  - Nol kernel panic, oops, atau hang; scheduler load balancing berjalan mulus.
+- Issue di-upgrade ke status `verified`.
 
